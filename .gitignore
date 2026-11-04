@@ -1,0 +1,10 @@
+# Vercel
+.vercel
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Logs / Temp
+*.log
+.cache
