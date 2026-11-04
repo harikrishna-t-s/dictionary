@@ -1,0 +1,29 @@
+my problem : {
+  - i am working in a call center of a healthcare scanning firm
+  - there are various studies from ct scan, mri scans, xray, lab test and ultrasound scans
+  - there is a lot of information which i need to remember all at once due to a vast amount of information
+}
+
+solution for my problem : {
+  - i want a central website to store all those informations
+  - i want a simple static website which i could deploy into vercel and access the website when ever i find it difficult remember
+  - i want a simple, minimal and quick accessible webpage
+  - my focus is to use the website in mobile phones more than website
+  - i will be adding data manually as text in the codebase
+  - set up the system in such a way that the source of information will be from a readme file and i will be adding data into the readme file.
+  - the readme file needs to be structured
+}
+
+i want you to : {
+  - generate the html, css and js file code in a single file
+  - generate a sample readme file
+}
+
+remarks : {
+  - i don't want you to generate an ai slop website
+  - i want the website to be quickly accessible with respect to the information
+  - i need search feature in the websit to be properly working since that will be a vital part of the website
+  - i want the website to be focued for iphone 13 and specifically firefox browser
+  - no need to over engineer the website
+  - i want the layout design of the website to be robust
+}

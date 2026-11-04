@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<title>Study reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Design tokens (light · black/white · violet accents) ──────────────── */
+:root {
+  --bg:          #ffffff;              /* pure white canvas */
+  --header:      #fafafa;             /* off-white header — 1 step up from canvas */
+  --surface:     #ffffff;             /* card surface */
+  --surface-h:   #f5f5f5;            /* hover / elevated surface */
+  --hover-ol:    rgba(0,0,0,.04);     /* alpha hover overlay (light equivalent) */
+  --active-ol:   rgba(0,0,0,.07);     /* active/selected overlay */
+  --border:      rgba(0,0,0,.1);      /* standard border */
+  --border-soft: rgba(0,0,0,.06);     /* subtle dividers */
+  --text:        #0a0a0a;            /* near-black primary text */
+  --muted:       #6b6b6b;            /* secondary text */
+  --dim:         rgba(0,0,0,.35);     /* placeholder / disabled */
+
+  /* Violet family — used for all accent/interactive colour */
+  --accent:      #6d28d9;            /* violet-700 */
+  --accent-h:    #7c3aed;            /* violet-600, brighter hover */
+  --accent-soft: rgba(109,40,217,.1);
+  --mark-bg:     rgba(109,40,217,.12);
+  --mark-text:   #4c1d95;            /* violet-900 */
+
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --t:           background-color 120ms ease, border-color 120ms ease,
+                 color 120ms ease, opacity 120ms ease;
+  --font: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* ─── Reset & base ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  min-height: 100dvh;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection { background: rgba(109,40,217,.2); color: var(--text); }
+
+mark {
+  background: var(--mark-bg);
+  color: var(--mark-text);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* max 600 weight — Notion never uses bold/700 in workspace UI */
+strong { font-weight: 600; }
+
+/* ─── App shell ─────────────────────────────────────────────────────────── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  /* Notion: header blends into canvas, border is the only separator */
+  background: var(--header);
+  border-bottom: 1px solid var(--border);
+  padding-top: env(safe-area-inset-top);
+}
+
+.header-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 14px 24px 0;
+}
+
+/* ─── App title / breadcrumb bar ───────────────────────────────────────── */
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.app-title-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Notion: icons are muted at rest (~40–45% opacity) */
+  color: var(--muted);
+  opacity: .7;
+  flex-shrink: 0;
+}
+
+.app-title-icon svg { width: 16px; height: 16px; stroke-width: 1.75; }
+
+.app-title-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  opacity: .8;
+  letter-spacing: -.01em;
+}
+
+/* ─── Search bar ────────────────────────────────────────────────────────── */
+.search-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: var(--dim);
+  pointer-events: none;
+  stroke-width: 2;
+}
+
+.search-wrap input {
+  width: 100%;
+  height: 34px;
+  /* Notion search: subtle inset on header bg */
+  background: rgba(0,0,0,.04);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  padding: 0 36px 0 32px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  transition: var(--t);
+}
+
+.search-wrap input::placeholder { color: var(--dim); }
+.search-wrap input::-webkit-search-cancel-button,
+.search-wrap input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+
+.search-wrap input:hover {
+  background: rgba(0,0,0,.06);
+  border-color: var(--border);
+}
+
+.search-wrap input:focus {
+  background: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.search-clear {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: var(--t);
+}
+
+.search-clear:hover { color: var(--text); background: var(--hover-ol); }
+.search-clear svg { width: 13px; height: 13px; stroke-width: 2.5; }
+.has-q .search-clear { display: flex; }
+
+/* ─── Filter chips ──────────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  margin: 0 -24px;
+  padding: 0 24px;
+  padding-bottom: 1px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-bar::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex: none;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: var(--radius-sm);
+  /* Notion chips: no border, transparent bg — only hover/active gets fill */
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--t);
+  white-space: nowrap;
+  letter-spacing: -.005em;
+}
+
+.chip:hover {
+  color: var(--text);
+  /* Notion alpha overlay on hover */
+  background: var(--hover-ol);
+}
+
+.chip[aria-pressed="true"] {
+  color: var(--text);
+  background: var(--active-ol);
+  border-color: var(--border);
+}
+
+.chip-count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Category color dot */
+.cdot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: hsl(var(--ch) var(--cs, 65%) 42%);
+}
+
+/* ─── Divider line below header ─────────────────────────────────────────── */
+.header-bottom-rule {
+  height: 1px;
+  background: var(--border);
+  margin-top: 10px;
+}
+
+/* ─── Main content ──────────────────────────────────────────────────────── */
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 24px calc(env(safe-area-inset-bottom) + 64px);
+}
+
+/* ─── Status line ───────────────────────────────────────────────────────── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--dim);
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  min-height: 20px;
+}
+
+/* ─── Category group header ─────────────────────────────────────────────── */
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Notion: sections separated by space, not thick lines */
+  margin: 36px 0 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.group-header:first-of-type { margin-top: 0; }
+
+.group-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.group-count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Cards ─────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 3px;
+  overflow: hidden;
+  /* Notion: at rest no shadow. On hover: faint lift */
+  transition: var(--t), box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.card:hover {
+  border-color: rgba(0,0,0,.18);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* coloured left accent bar */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+  min-height: 52px;
+  padding: 0;
+  text-align: left;
+  position: relative;
+}
+
+/* The thin left-side coloured stripe */
+.card-stripe {
+  width: 3px;
+  align-self: stretch;
+  flex-shrink: 0;
+  background: hsl(var(--ch) var(--cs, 65%) 46%);
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  transition: opacity 120ms ease;
+}
+
+.card:not(.open) .card-stripe { opacity: .45; }
+.card.open .card-stripe { opacity: 1; }
+
+.card-head-inner {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+  padding: 12px 14px 12px 12px;
+  min-width: 0;
+  /* Notion: row hover uses alpha overlay, not bg swap */
+  transition: background 120ms ease;
+}
+
+.card-head:hover .card-head-inner {
+  background: rgba(0,0,0,.025);
+}
+
+.card-text { flex: 1; min-width: 0; }
+
+.card-category {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: hsl(var(--ch) var(--cs, 65%) 36%);
+  margin-bottom: 1px;
+}
+
+.card-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.card-summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-top: 3px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  font-weight: 400;
+}
+
+.open .card-summary {
+  display: block;
+  -webkit-line-clamp: unset;
+}
+
+/* Chevron toggle — dim at rest, visible on hover/open */
+.chevron {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0,0,0,.25);
+  transition: transform 120ms ease, color 120ms ease;
+}
+
+.card-head:hover .chevron { color: var(--muted); }
+.chevron svg { width: 12px; height: 12px; }
+.open .chevron { transform: rotate(180deg); color: var(--muted); }
+
+/* ─── Card body / expanded content ──────────────────────────────────────── */
+.card-body {
+  display: none;
+  border-top: 1px solid var(--border-soft);
+  /* align left edge with text, past the colour stripe */
+  margin: 0 0 0 3px;
+}
+
+.open .card-body { display: block; }
+
+.card-body-inner {
+  padding: 2px 16px 14px 12px;
+}
+
+/* Field rows — two-column grid: label | value */
+.field-row {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 2px 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: baseline;
+}
+
+.field-row:last-child { border-bottom: none; }
+
+.field-key {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--dim);
+  letter-spacing: .01em;
+  padding-top: 1px;
+}
+
+.field-val {
+  font-size: 14px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.55;
+}
+
+.field-sub {
+  position: relative;
+  padding-left: 12px;
+  margin-top: 3px;
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.field-sub::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: .62em;
+  width: 4px;
+  height: 1.5px;
+  background: var(--border);
+  border-radius: 1px;
+}
+
+.card-note {
+  font-size: 13.5px;
+  color: var(--muted);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border-soft);
+  line-height: 1.6;
+}
+.card-note:last-child { border-bottom: none; padding-bottom: 4px; }
+
+/* ─── Empty / error states ──────────────────────────────────────────────── */
+.state-empty {
+  padding: 56px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.state-empty-icon {
+  font-size: 36px;
+  margin-bottom: 14px;
+  opacity: .45;
+}
+
+.state-empty p { font-size: 14px; color: var(--muted); margin-bottom: 2px; }
+.state-empty p strong { font-weight: 500; color: var(--text); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--t);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: var(--hover-ol);
+  border-color: rgba(0,0,0,.18);
+}
+
+.state-error {
+  padding: 24px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.state-error code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: SFMono-Regular, Menlo, Consolas, "PT Mono", monospace;
+}
+
+/* ─── Scrollbar styling ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.25); }
+
+/* ─── Motion preferences ────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+
+/* ─── Responsive adjustments ────────────────────────────────────────────── */
+@media (max-width: 540px) {
+  .header-inner { padding: 12px 16px 0; }
+  main { padding: 18px 16px calc(env(safe-area-inset-bottom) + 48px); }
+  .filter-bar { margin: 0 -16px; padding-left: 16px; }
+  .field-row { grid-template-columns: 1fr; gap: 2px; }
+  .field-key { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     APP HEADER
+══════════════════════════════════════════════════════════════ -->
+<header class="app-header">
+  <div class="header-inner">
+
+    <!-- Page title / breadcrumb -->
+    <div class="app-title">
+      <span class="app-title-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="13"/>
+          <line x1="9" y1="17" x2="12" y2="17"/>
+        </svg>
+      </span>
+      <span class="app-title-text" id="page-title">Study reference</span>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrap" id="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M20 20l-4-4"/>
+      </svg>
+      <input id="q" type="search"
+        placeholder="Search studies, keywords, prep…"
+        enterkeyhint="search"
+        autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
+        aria-label="Search studies">
+      <button class="search-clear" id="clear" type="button" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Category filters -->
+    <div class="filter-bar" id="chips" role="group" aria-label="Filter by category"></div>
+
+    <div class="header-bottom-rule"></div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════════════════════ -->
+<main>
+  <div class="status-bar" id="status" role="status" aria-live="polite">
+    <span>Loading…</span>
+  </div>
+  <div id="list"></div>
+  <noscript><p class="state-error">JavaScript is required to show this page.</p></noscript>
+</main>
+
+<script>
+(() => {
+  const SRC = 'README.md';
+  const CACHE_KEY = 'study-ref-readme-v1';
+  // All hues in the violet family (260–300°). Pairs: [hue, saturation%]
+  // Saturation varies 55–80% so each category stays distinct but family-coherent.
+  const PALETTE = [
+    [265, 70],   // violet
+    [280, 65],   // purple-violet
+    [255, 60],   // blue-violet
+    [290, 55],   // orchid
+    [270, 80],   // deep violet
+    [260, 60],   // indigo-violet
+    [285, 72],   // medium violet
+    [275, 58],   // soft violet
+  ];
+
+  const $ = s => document.querySelector(s);
+  const els = {
+    q:      $('#q'),
+    box:    $('#search-box'),
+    chips:  $('#chips'),
+    status: $('#status'),
+    list:   $('#list'),
+    clear:  $('#clear'),
+    title:  $('#page-title'),
+  };
+
+  let studies = [], cats = [], activeCat = null, offline = false, re = null;
+  const opened = new Map();
+
+  /* ── helpers ───────────────────────────────────────────────────────── */
+  const esc  = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const tokens = s => norm(s).match(/[\p{L}\p{M}\p{N}]+/gu) || [];
+  // Returns {h, s} for a category name — always violet-family
+  const palette = name => PALETTE[Math.max(0, cats.findIndex(c => c.name === name)) % PALETTE.length];
+  const paletteStyle = name => { const [h,s] = palette(name); return `--ch:${h};--cs:${s}%`; };
+
+  /* ── README parser ─────────────────────────────────────────────────── */
+  function parse(md) {
+    md = md.replace(/<!--[\s\S]*?-->/g, '');
+    let title = '', cat = null, cur = null, last = null, fence = false;
+    const catList = [], out = [];
+
+    for (const raw of md.split(/\r?\n/)) {
+      const line = raw.replace(/\s+$/, '');
+      if (/^\s*(```|~~~)/.test(line)) { fence = !fence; continue; }
+      if (fence) continue;
+
+      let m;
+      if ((m = line.match(/^#\s+(.+)/)))   { title = title || m[1].trim(); continue; }
+      if ((m = line.match(/^##\s+(.+)/)))  {
+        const name = m[1].trim();
+        cat = catList.find(c => c.name === name);
+        if (!cat) { cat = {name, n: 0}; catList.push(cat); }
+        cur = null; last = null; continue;
+      }
+      if ((m = line.match(/^###\s+(.+)/))) {
+        if (!cat) { cat = {name: 'General', n: 0}; catList.push(cat); }
+        cur = {name: m[1].trim(), cat: cat.name, fields: []};
+        out.push(cur); cat.n++; last = null; continue;
+      }
+      if (!cur || !line.trim()) continue;
+
+      if ((m = line.match(/^(?:\s{2,}|\t+)[-*+]\s+(.*)/)) && last) {
+        last.lines.push({t: m[1], sub: true}); continue;
+      }
+      let text = line.trim();
+      if ((m = line.match(/^[-*+]\s+(.*)/))) {
+        text = m[1];
+        const f = text.match(/^\*{0,2}(\p{L}[^:*]{0,31}?)\*{0,2}:\*{0,2}\s*(.*)$/u);
+        if (f) {
+          last = {key: f[1].trim(), lines: f[2] ? [{t: f[2], sub: false}] : []};
+          cur.fields.push(last); continue;
+        }
+      }
+      cur.fields.push({key: '', lines: [{t: text, sub: false}]});
+      last = null;
+    }
+    return {title, cats: catList, studies: out};
+  }
+
+  /* ── search index ──────────────────────────────────────────────────── */
+  const ALIAS_KEYS = /^(also known as|aka|alias|aliases|keywords?|tags?|codes?|other names?)$/i;
+  function index(list) {
+    const plain = f => (f.key + ' ' + f.lines.map(l => l.t).join(' ')).replace(/\*\*/g, '');
+    list.forEach((s, i) => {
+      s.i = i;
+      const sf = s.fields.find(f => /^summary$/i.test(f.key)) || s.fields.find(f => f.key);
+      s.summary = sf ? sf.lines.map(l => l.t).join(' ') : '';
+      s.rest = s.fields.filter(f => f !== sf);
+      const alias = s.fields.filter(f => ALIAS_KEYS.test(f.key));
+      s.z = {
+        name:  tokens(s.name),
+        alias: tokens(alias.map(plain).join(' ')),
+        cat:   tokens(s.cat),
+        body:  tokens(s.fields.map(plain).join(' ')),
+      };
+      s.hay = norm([s.name, s.cat, ...s.fields.map(plain)].join(' '));
+    });
+  }
+
+  function near(a, b) {
+    const d = a.length >= 8 ? 2 : 1;
+    if (Math.abs(a.length - b.length) > d) return false;
+    let prev = Array.from({length: b.length + 1}, (_, j) => j);
+    for (let i = 1; i <= a.length; i++) {
+      const cur = [i];
+      for (let j = 1; j <= b.length; j++) {
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      }
+      prev = cur;
+    }
+    return prev[b.length] <= d;
+  }
+
+  const ZONES = [['name', 10], ['alias', 6], ['cat', 3], ['body', 1]];
+  function termScore(t, s, fuzzy) {
+    let best = 0;
+    for (const [z, w] of ZONES) {
+      for (const tok of s.z[z]) {
+        let k = 0;
+        if (tok === t) k = 3;
+        else if (tok.startsWith(t)) k = 2;
+        else if (fuzzy && t.length >= 4 && (near(t, tok) || near(t, tok.slice(0, t.length)))) k = 1;
+        if (k * w > best) best = k * w;
+      }
+    }
+    if (!best && t.length >= 3 && s.hay.includes(t)) best = 1;
+    return best;
+  }
+
+  function search(terms) {
+    const pool = studies.filter(s => !activeCat || s.cat === activeCat);
+    if (!terms.length) return {items: pool, fuzzy: false};
+    for (const fuzzy of [false, true]) {
+      const hits = [];
+      for (const s of pool) {
+        let total = 0, ok = true;
+        for (const t of terms) {
+          const sc = termScore(t, s, fuzzy);
+          if (!sc) { ok = false; break; }
+          total += sc;
+        }
+        if (ok) hits.push({s, total});
+      }
+      if (hits.length) {
+        hits.sort((a, b) => b.total - a.total || a.s.i - b.s.i);
+        return {items: hits.map(h => h.s), fuzzy};
+      }
+    }
+    return {items: [], fuzzy: false};
+  }
+
+  /* ── rendering ─────────────────────────────────────────────────────── */
+  const hi = text => re
+    ? text.split(re).map((p, i) => i % 2 ? '<mark>' + esc(p) + '</mark>' : esc(p)).join('')
+    : esc(text);
+  const inline = t => t.split(/\*\*(.+?)\*\*/).map((p, i) => i % 2 ? '<strong>' + hi(p) + '</strong>' : hi(p)).join('');
+
+  function card(s, showCat, open) {
+    const ps = paletteStyle(s.cat);
+
+    const rows = s.rest.map(f => {
+      if (!f.key) {
+        return `<p class="card-note">${f.lines.map(l => inline(l.t)).join('<br>')}</p>`;
+      }
+      const valLines = f.lines.map(l =>
+        `<div class="${l.sub ? 'field-sub' : ''}">${inline(l.t)}</div>`
+      ).join('');
+      return `<div class="field-row">
+        <span class="field-key">${hi(f.key)}</span>
+        <div class="field-val">${valLines}</div>
+      </div>`;
+    }).join('');
+
+    return `<article class="card${open ? ' open' : ''}" style="${ps}" data-id="${s.i}">
+      <button class="card-head" type="button" aria-expanded="${open}" aria-controls="b${s.i}">
+        <span class="card-stripe" aria-hidden="true"></span>
+        <span class="card-head-inner">
+          <span class="card-text">
+            ${showCat ? `<span class="card-category">${esc(s.cat)}</span>` : ''}
+            <span class="card-name">${inline(s.name)}</span>
+            ${s.summary ? `<span class="card-summary">${inline(s.summary)}</span>` : ''}
+          </span>
+          <span class="chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+      <div class="card-body" id="b${s.i}">
+        <div class="card-body-inner">${rows}</div>
+      </div>
+    </article>`;
+  }
+
+  function render() {
+    const q     = els.q.value.trim();
+    const terms = tokens(q);
+    const hl    = [...new Set(terms.filter(t => t.length >= 3))];
+    re = hl.length ? new RegExp('(' + hl.join('|') + ')', 'gi') : null;
+    els.box.classList.toggle('has-q', !!q);
+
+    const {items, fuzzy} = search(terms);
+    const n = items.length;
+    let msg;
+    if (!q) msg = `${n} ${n === 1 ? 'entry' : 'entries'}` + (activeCat ? ` · ${activeCat}` : '');
+    else     msg = `${n} ${n === 1 ? 'result' : 'results'}` + (activeCat ? ` · ${activeCat}` : '') + (fuzzy ? ' · approx. match' : '');
+    if (offline) msg += ' · offline';
+    els.status.textContent = msg;
+
+    if (!n) {
+      els.list.innerHTML = `<div class="state-empty">
+        <div class="state-empty-icon">🔍</div>
+        <p>No results for <strong>"${esc(q)}"</strong></p>
+        <p>Try a shorter or different search term.</p>
+        ${activeCat ? '<button class="btn-ghost" id="all" type="button">Search all categories</button>' : ''}
+      </div>`;
+      return;
+    }
+
+    const auto   = !!q && n <= 3;
+    const isOpen = s => opened.has(s.i) ? opened.get(s.i) : auto;
+    let html = '';
+
+    if (!q && !activeCat) {
+      for (const c of cats) {
+        const g = items.filter(s => s.cat === c.name);
+        if (!g.length) continue;
+        const ps = paletteStyle(c.name);
+        html += `<div class="group-header" style="${ps}">
+          <span class="cdot"></span>
+          <span class="group-title">${esc(c.name)}</span>
+          <span class="group-count">${g.length}</span>
+        </div>` + g.map(s => card(s, false, isOpen(s))).join('');
+      }
+    } else {
+      const showCat = !!q && !activeCat;
+      html = items.map(s => card(s, showCat, isOpen(s))).join('');
+    }
+    els.list.innerHTML = html;
+  }
+
+  function renderChips() {
+    const allPressed = !activeCat;
+    els.chips.innerHTML =
+      `<button class="chip" type="button" data-cat="" aria-pressed="${allPressed}">All</button>` +
+      cats.map(c => {
+        const ps = paletteStyle(c.name);
+        return `<button class="chip" type="button" data-cat="${esc(c.name)}" aria-pressed="${activeCat === c.name}" style="${ps}">
+          <span class="cdot"></span>${esc(c.name)}<span class="chip-count">${c.n}</span>
+        </button>`;
+      }).join('');
+  }
+
+  function fail(msg) {
+    els.status.textContent = '';
+    els.list.innerHTML = `<div class="state-error">${msg}</div>`;
+  }
+
+  /* ── events ────────────────────────────────────────────────────────── */
+  els.q.addEventListener('input', render);
+  els.q.addEventListener('keydown', e => { if (e.key === 'Enter') els.q.blur(); });
+  els.clear.addEventListener('click', () => { els.q.value = ''; render(); els.q.focus(); });
+
+  window.addEventListener('touchmove', e => {
+    if (document.activeElement === els.q && e.target !== els.q) els.q.blur();
+  }, {passive: true});
+
+  els.chips.addEventListener('click', e => {
+    const b = e.target.closest('.chip');
+    if (!b) return;
+    activeCat = b.dataset.cat || null;
+    renderChips(); render(); window.scrollTo(0, 0);
+  });
+
+  els.list.addEventListener('click', e => {
+    if (e.target.closest('#all')) { activeCat = null; renderChips(); render(); return; }
+    const head = e.target.closest('.card-head');
+    if (!head) return;
+    const c = head.closest('.card');
+    const open = !c.classList.contains('open');
+    c.classList.toggle('open', open);
+    head.setAttribute('aria-expanded', open);
+    opened.set(+c.dataset.id, open);
+  });
+
+  /* ── load ──────────────────────────────────────────────────────────── */
+  async function load() {
+    let text = null;
+    try {
+      const r = await fetch(SRC, {cache: 'no-cache'});
+      if (!r.ok) throw new Error(r.status);
+      text = await r.text();
+      try { localStorage.setItem(CACHE_KEY, text); } catch (_) {}
+    } catch (_) {
+      try { text = localStorage.getItem(CACHE_KEY); } catch (__) {}
+      offline = !!text;
+    }
+    if (!text) {
+      fail('Could not load <code>README.md</code>. Keep it in the same folder as <code>index.html</code> and open the site over http (not as a local file).');
+      return;
+    }
+    const data = parse(text);
+    if (!data.studies.length) {
+      fail('No studies found. Put each study under a <code>###</code> heading inside a <code>##</code> category.');
+      return;
+    }
+    document.title = data.title || 'Study reference';
+    els.title.textContent = data.title || 'Study reference';
+    cats = data.cats.filter(c => c.n > 0);
+    studies = data.studies;
+    index(studies);
+    renderChips();
+    render();
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
