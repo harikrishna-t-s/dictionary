@@ -1,4 +1,4 @@
-# Scan Studies Reference — Instruction Manual
+# TESLA DOC — Instruction Manual
 
 A fast, Notion-inspired study reference and clinical protocol lookup tool. Built as a single, self-contained web app with zero dependencies.
 
@@ -47,7 +47,7 @@ A plain line or bullet without a label becomes a general note.
 
 | Syntax | Meaning |
 |---|---|
-| `# Title` | Sets the page title and breadcrumb header (e.g. `# Scan Studies Reference`). |
+| `# Title` | Sets the page title and breadcrumb header (e.g. `# TESLA DOC`). |
 | `## Category` | Defines a category. Each category automatically generates a filter chip at the top. |
 | `### Study Name` | Defines a new study card. Keep names concise and recognizable. |
 | `- **Summary:** text` | Displayed directly on the collapsed card preview. If omitted, the first field is used. |
