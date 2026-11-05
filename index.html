@@ -3,21 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)">
+<script>
+  (() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>
 <title>TESLA DOC</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236d28d9' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ─── Design tokens (light · black/white · violet accents) ──────────────── */
+/* ─── Design tokens (light & dark · violet accents) ────────────────────── */
 :root {
   --bg:          #ffffff;              /* pure white canvas */
   --header:      rgba(250, 250, 250, 0.94); /* off-white header with subtle glass translucency */
   --surface:     #ffffff;             /* card surface */
   --surface-h:   #f5f5f5;            /* hover / elevated surface */
-  --hover-ol:    rgba(0,0,0,.04);     /* alpha hover overlay (light equivalent) */
+  --hover-ol:    rgba(0,0,0,.04);     /* alpha hover overlay */
   --active-ol:   rgba(0,0,0,.07);     /* active/selected overlay */
   --border:      rgba(0,0,0,.1);      /* standard border */
   --border-soft: rgba(0,0,0,.06);     /* subtle dividers */
@@ -32,6 +39,10 @@
   --mark-bg:     rgba(109,40,217,.12);
   --mark-text:   #4c1d95;            /* violet-900 */
 
+  --cdot-l:      42%;
+  --stripe-l:    46%;
+  --cat-l:       36%;
+
   --radius-sm:   4px;
   --radius-md:   6px;
   --radius-lg:   8px;
@@ -43,6 +54,56 @@
                  color 140ms ease, opacity 140ms ease;
   --font: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont,
           "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg:          #191919;
+  --header:      rgba(26, 26, 26, 0.94);
+  --surface:     #222222;
+  --surface-h:   #2a2a2a;
+  --hover-ol:    rgba(255, 255, 255, .05);
+  --active-ol:   rgba(255, 255, 255, .09);
+  --border:      rgba(255, 255, 255, .12);
+  --border-soft: rgba(255, 255, 255, .07);
+  --text:        #f0f0f0;
+  --muted:       #a0a0a0;
+  --dim:         rgba(255, 255, 255, .4);
+
+  --accent:      #a78bfa;
+  --accent-h:    #c4b5fd;
+  --accent-soft: rgba(167, 139, 250, .15);
+  --mark-bg:     rgba(167, 139, 250, .22);
+  --mark-text:   #ede9fe;
+
+  --cdot-l:      62%;
+  --stripe-l:    58%;
+  --cat-l:       68%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:          #191919;
+    --header:      rgba(26, 26, 26, 0.94);
+    --surface:     #222222;
+    --surface-h:   #2a2a2a;
+    --hover-ol:    rgba(255, 255, 255, .05);
+    --active-ol:   rgba(255, 255, 255, .09);
+    --border:      rgba(255, 255, 255, .12);
+    --border-soft: rgba(255, 255, 255, .07);
+    --text:        #f0f0f0;
+    --muted:       #a0a0a0;
+    --dim:         rgba(255, 255, 255, .4);
+
+    --accent:      #a78bfa;
+    --accent-h:    #c4b5fd;
+    --accent-soft: rgba(167, 139, 250, .15);
+    --mark-bg:     rgba(167, 139, 250, .22);
+    --mark-text:   #ede9fe;
+
+    --cdot-l:      62%;
+    --stripe-l:    58%;
+    --cat-l:       68%;
+  }
 }
 
 /* ─── Reset & base ─────────────────────────────────────────────────────── */
@@ -149,12 +210,61 @@ strong { font-weight: 600; }
 }
 
 /* ─── App title / breadcrumb bar ───────────────────────────────────────── */
+.app-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
 .app-title {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 0;
   user-select: none;
+}
+
+.theme-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--t), transform 160ms var(--ease-spring);
+  cursor: pointer;
+  background: transparent;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+  background: var(--hover-ol);
+  border-color: var(--border);
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.theme-toggle .sun-icon { display: none; }
+.theme-toggle .moon-icon { display: block; }
+
+[data-theme="dark"] .theme-toggle .sun-icon { display: block; }
+[data-theme="dark"] .theme-toggle .moon-icon { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .sun-icon { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .moon-icon { display: none; }
 }
 
 .app-title-icon {
@@ -217,7 +327,7 @@ strong { font-weight: 600; }
 .search-wrap input {
   width: 100%;
   height: 34px;
-  background: rgba(0,0,0,.035);
+  background: var(--hover-ol);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
   color: var(--text);
@@ -239,14 +349,14 @@ strong { font-weight: 600; }
 .search-wrap input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
 
 .search-wrap input:hover {
-  background: rgba(0,0,0,.055);
+  background: var(--surface-h);
   border-color: var(--border);
 }
 
 .search-wrap input:focus {
-  background: #ffffff;
+  background: var(--surface);
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft), 0 2px 8px rgba(109,40,217,.06);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 2px 8px var(--accent-soft);
 }
 
 .search-clear {
@@ -354,7 +464,7 @@ strong { font-weight: 600; }
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: hsl(var(--ch) var(--cs, 65%) 42%);
+  background: hsl(var(--ch) var(--cs, 65%) var(--cdot-l, 42%));
   transition: transform 220ms var(--ease-spring), background-color 180ms ease;
 }
 
@@ -438,9 +548,21 @@ main {
 }
 
 .card:hover {
-  border-color: rgba(0,0,0,.18);
-  box-shadow: 0 4px 12px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.02);
+  border-color: var(--border);
+  box-shadow: 0 4px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.03);
   transform: translateY(-1px);
+}
+
+[data-theme="dark"] .card:hover {
+  border-color: rgba(255, 255, 255, .2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .45);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .card:hover {
+    border-color: rgba(255, 255, 255, .2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .45);
+  }
 }
 
 .card:active {
@@ -465,7 +587,7 @@ main {
   width: 3px;
   align-self: stretch;
   flex-shrink: 0;
-  background: hsl(var(--ch) var(--cs, 65%) 46%);
+  background: hsl(var(--ch) var(--cs, 65%) var(--stripe-l, 46%));
   border-radius: var(--radius-lg) 0 0 var(--radius-lg);
   transition: opacity 180ms ease, width 180ms var(--ease-out), background-color 180ms ease;
 }
@@ -485,7 +607,7 @@ main {
 }
 
 .card-head:hover .card-head-inner {
-  background: rgba(0,0,0,.025);
+  background: var(--hover-ol);
 }
 
 .card-text { flex: 1; min-width: 0; }
@@ -496,7 +618,7 @@ main {
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: hsl(var(--ch) var(--cs, 65%) 36%);
+  color: hsl(var(--ch) var(--cs, 65%) var(--cat-l, 36%));
   margin-bottom: 1px;
   transition: color 180ms ease;
 }
@@ -538,7 +660,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0,0,0,.3);
+  color: var(--dim);
   transition: transform 260ms var(--ease-spring), color 160ms ease;
 }
 
@@ -586,7 +708,7 @@ main {
 }
 
 .field-row:hover {
-  background: rgba(0,0,0,.018);
+  background: var(--hover-ol);
 }
 
 .field-row:last-child { border-bottom: none; }
@@ -644,7 +766,7 @@ main {
 }
 
 .card-note:hover {
-  background: rgba(0,0,0,.018);
+  background: var(--hover-ol);
 }
 
 .card-note:last-child { border-bottom: none; padding-bottom: 4px; }
@@ -747,14 +869,25 @@ main {
 <header class="app-header">
   <div class="header-inner">
 
-    <!-- Page title / breadcrumb -->
-    <div class="app-title">
-      <span class="app-title-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
+    <!-- Page title / breadcrumb & theme toggle -->
+    <div class="app-top-bar">
+      <div class="app-title">
+        <span class="app-title-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
+          </svg>
+        </span>
+        <span class="app-title-text" id="page-title">TESLA DOC</span>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
-      </span>
-      <span class="app-title-text" id="page-title">TESLA DOC</span>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Search -->
@@ -1276,6 +1409,17 @@ main {
   }
 
   /* ── events ────────────────────────────────────────────────────────── */
+  const themeToggle = $('#theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+        (!document.documentElement.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (_) {}
+    });
+  }
+
   els.q.addEventListener('input', render);
   els.q.addEventListener('keydown', e => { if (e.key === 'Enter') els.q.blur(); });
   els.clear.addEventListener('click', () => {
