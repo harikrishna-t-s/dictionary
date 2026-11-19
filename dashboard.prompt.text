@@ -1,0 +1,30 @@
+what i want to achieve : {
+  - i want to add a dashboard to monitor the call center metrices
+  - i have defined a structure in the file data.txt
+  - my ideal daily flow : {
+    - i will append the daily metrices into the file data.txt
+    - i would run an automation python script which would update data into the web page file index.html
+    - afterwards i would push the website to git and automatically updating the dashboard in the deployed website in vercel
+  }
+}
+
+what i want you to do : {
+  - analyze the current structur of index.html
+  - analyze the structure of data being appended daily in data.txt
+  - generate a python automation script that would update the data in the index.html page
+  - i want you to make the following changes in the index.html page : {
+    - while opening the webpage rather than landing in the "all" tab -> replace it with a dashboard tab
+    - in the dashboard tab i want : {
+      - get a quick summary of all the data so far
+      - search and find the summary for a specified date
+      - search phone number and find any related booking entry
+      - there could be search based as well as filter based display
+      - no need to include information about enquiry not yet confirmed
+    }
+    - ensure that the overall theme of the dashboard to be the same as that of overall website
+    - do not change anything other than the mentioned changed in this prompt
+    - ensure that the dashboard is optimal for daily operations and analysis
+  }
+  - do not over engineer any of my requirements
+  - do not over engineer the python script and maintain simplicity
+}

@@ -835,6 +835,315 @@ main {
   font-family: SFMono-Regular, Menlo, Consolas, "PT Mono", monospace;
 }
 
+/* ─── Dashboard Styles ──────────────────────────────────────────────────── */
+.dash-view {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: itemSlideFade 240ms var(--ease-out) both;
+}
+
+.dash-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.dash-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.dash-filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--dim);
+  margin-right: 4px;
+}
+
+.dash-pill {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--t), transform 140ms var(--ease-spring);
+  user-select: none;
+}
+
+.dash-pill:hover {
+  color: var(--text);
+  background: var(--hover-ol);
+  border-color: var(--border);
+  transform: translateY(-1px);
+}
+
+.dash-pill:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.dash-pill[aria-pressed="true"],
+.dash-pill.active {
+  color: var(--accent);
+  background: var(--active-ol);
+  border-color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+
+.dash-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.dash-kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  transition: var(--t), transform 160ms var(--ease-spring);
+}
+
+.dash-kpi:hover {
+  border-color: var(--accent);
+  background: var(--surface-h);
+  transform: translateY(-1px);
+}
+
+.dash-kpi-val {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.dash-kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-top: 4px;
+}
+
+.dash-kpi-sub {
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+
+.dash-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dash-modalities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.dash-mod-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--t);
+}
+
+.dash-mod-card:hover {
+  border-color: var(--accent);
+}
+
+.dash-mod-head {
+  padding: 10px 14px;
+  background: var(--surface-h);
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dash-mod-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dash-mod-body {
+  padding: 8px 14px;
+}
+
+.dash-mod-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 12.5px;
+}
+
+.dash-mod-row:last-child {
+  border-bottom: none;
+}
+
+.dash-mod-row .k {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.dash-mod-row .v {
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Confirmed Bookings Container */
+.dash-bookings-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.dash-bookings-head {
+  padding: 12px 14px;
+  background: var(--surface-h);
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dash-bookings-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  letter-spacing: .02em;
+}
+
+.dash-booking-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-booking-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  transition: background-color 140ms ease;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dash-booking-item:last-child {
+  border-bottom: none;
+}
+
+.dash-booking-item:hover {
+  background: var(--hover-ol);
+}
+
+.dash-booking-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-booking-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dash-booking-phone {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dash-booking-phone:hover {
+  text-decoration: underline;
+}
+
+.dash-booking-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dash-slot-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface-h);
+  border: 1px solid var(--border-soft);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-date-badge {
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.dash-empty {
+  padding: 32px 14px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 /* ─── Scrollbar styling ─────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -930,6 +1239,138 @@ main {
      DATA SOURCE (Markdown)
      To add, edit, or remove studies, edit the markdown below.
 ══════════════════════════════════════════════════════════════ -->
+<script type="application/json" id="dashboard-data">
+[
+  {
+    "date": "18/11/26",
+    "metrics": {
+      "MRI SCAN": {
+        "BOOKINGS TAKEN FOR TODAY": 12,
+        "BOOKING FOR TOMORROW": 15,
+        "TOTAL ENQUIRY": 17,
+        "BOOKING CONFIRMED": 13,
+        "WALK IN": 1,
+        "CONVERSION": 4
+      },
+      "ULTRASOUND": {
+        "BOOKINGS TAKEN FOR TODAY": 12,
+        "BOOKING FOR TOMORROW": 12
+      },
+      "CT": {
+        "BOOKINGS TAKEN FOR TODAY": 5,
+        "BOOKING FOR TOMORROW": 16
+      }
+    },
+    "bookings": [
+      {
+        "name": "ALVIN",
+        "phone": "8089977609",
+        "date": "TODAY",
+        "time": "5 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "DILI",
+        "phone": "9847824214",
+        "date": "19.11.26",
+        "time": "6 AM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "MIDHUN KRISHNA",
+        "phone": "9188779070",
+        "date": "TODAY",
+        "time": "9.30 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "RADHIKA",
+        "phone": "9633922965",
+        "date": "TODAY",
+        "time": "10.30 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "RADHA",
+        "phone": "9544992920",
+        "date": "20.11.26",
+        "time": "10 AM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "ANANDHU",
+        "phone": "8138874456",
+        "date": "19.11.26",
+        "time": "12 AM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "JOJO",
+        "phone": "9946762820",
+        "date": "20.11.26",
+        "time": "11 AM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "BIJU",
+        "phone": "9567540913",
+        "date": "19.11.26",
+        "time": "6 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "PAULY",
+        "phone": "9747791321",
+        "date": "19.11.26",
+        "time": "8.15 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "ARYANANDHA",
+        "phone": "9496315129",
+        "date": "19.11.26",
+        "time": "10 AM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "JOSE V G",
+        "phone": "9747217466",
+        "date": "19.11.26",
+        "time": "11 AM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "ANJU",
+        "phone": "8594056916",
+        "date": "19.11.26",
+        "time": "9 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      },
+      {
+        "name": "SREEKUMAR",
+        "phone": "9447527827",
+        "date": "24.11.26",
+        "time": "12 PM",
+        "modality": "MRI",
+        "logged_date": "18/11/26"
+      }
+    ]
+  }
+]
+</script>
+
 <script type="text/markdown" id="study-data">
 # TESLA DOC
 
@@ -1376,7 +1817,8 @@ main {
     title:  $('#page-title'),
   };
 
-  let studies = [], cats = [], activeCat = null, re = null;
+  let studies = [], cats = [], activeCat = '__dashboard__', re = null;
+  let dashboardData = [], dashSelectedDate = null, dashSelectedModality = null;
   const opened = new Map();
 
   /* ── helpers ───────────────────────────────────────────────────────── */
@@ -1547,12 +1989,267 @@ main {
     </article>`;
   }
 
+  /* ── dashboard renderer ───────────────────────────────────────────── */
+  function renderDashboard(q) {
+    if (!dashboardData || !dashboardData.length) {
+      els.status.textContent = 'Dashboard · Call Center Metrics';
+      els.list.innerHTML = `<div class="state-empty">
+        <div class="state-empty-icon">📊</div>
+        <p><strong>No dashboard data found</strong></p>
+        <p>Append your daily records to <code>data.txt</code> and run <code>python3 update_dashboard.py</code> to sync.</p>
+      </div>`;
+      return;
+    }
+
+    const normQ = norm(q);
+    const cleanNumQ = q.replace(/[\s-]/g, '');
+
+    // Available dates in data
+    const allDates = [...new Set(dashboardData.map(d => d.date))];
+
+    // Filter target days for summary cards:
+    let activeDays = dashboardData;
+    if (dashSelectedDate) {
+      activeDays = dashboardData.filter(d => d.date === dashSelectedDate);
+    } else if (normQ && !/^\d{5,}$/.test(cleanNumQ)) {
+      // Check if q matches date (e.g. 18/11 or 18.11 or 2026)
+      const matchingDates = dashboardData.filter(d => {
+        const dNorm = norm(d.date);
+        return dNorm.includes(normQ) || dNorm.replace(/[/.]/g, '-').includes(normQ.replace(/[/.]/g, '-'));
+      });
+      if (matchingDates.length > 0) {
+        activeDays = matchingDates;
+      }
+    }
+
+    // Aggregate metrics across activeDays
+    let totalConfirmedBookingsCount = 0;
+    let totalTodayBookings = 0;
+    let totalTmrwBookings = 0;
+    let totalEnquiries = 0;
+    let totalWalkIns = 0;
+    let totalConversions = 0;
+
+    const modAggregates = {};
+
+    activeDays.forEach(day => {
+      totalConfirmedBookingsCount += (day.bookings ? day.bookings.length : 0);
+      if (day.metrics) {
+        for (const [mod, met] of Object.entries(day.metrics)) {
+          if (!modAggregates[mod]) modAggregates[mod] = {};
+          for (const [k, v] of Object.entries(met)) {
+            if (/YET TO CONFIRM/i.test(k)) continue; // ignore unconfirmed enquiry
+            if (typeof v === 'number') {
+              modAggregates[mod][k] = (modAggregates[mod][k] || 0) + v;
+              if (/BOOKINGS? TAKEN FOR TODAY/i.test(k)) totalTodayBookings += v;
+              else if (/BOOKINGS? FOR TOMORROW/i.test(k)) totalTmrwBookings += v;
+              else if (/TOTAL ENQUIRY/i.test(k)) totalEnquiries += v;
+              else if (/WALK IN/i.test(k)) totalWalkIns += v;
+              else if (/CONVERSION/i.test(k)) totalConversions += v;
+            } else {
+              modAggregates[mod][k] = v;
+            }
+          }
+        }
+      }
+    });
+
+    // Gather bookings
+    const bookingsSource = dashSelectedDate ? activeDays : dashboardData;
+    let allBookings = [];
+    bookingsSource.forEach(d => {
+      if (d.bookings) allBookings.push(...d.bookings);
+    });
+
+    // Filter bookings if modality filter or search query is present
+    let filteredBookings = allBookings;
+    if (dashSelectedModality) {
+      filteredBookings = filteredBookings.filter(b => b.modality && b.modality.toUpperCase() === dashSelectedModality.toUpperCase());
+    }
+
+    if (normQ) {
+      filteredBookings = filteredBookings.filter(b => {
+        const phoneMatch = cleanNumQ.length >= 3 && b.phone && b.phone.replace(/[\s-]/g, '').includes(cleanNumQ);
+        const nameMatch = b.name && norm(b.name).includes(normQ);
+        const dateMatch = (b.date && norm(b.date).includes(normQ)) || (b.logged_date && norm(b.logged_date).includes(normQ));
+        const timeMatch = b.time && norm(b.time).includes(normQ);
+        const modMatch = b.modality && norm(b.modality).includes(normQ);
+        return phoneMatch || nameMatch || dateMatch || timeMatch || modMatch;
+      });
+    }
+
+    // Status line update
+    if (normQ) {
+      els.status.textContent = `Dashboard · Search "${esc(q)}" · ${filteredBookings.length} booking match${filteredBookings.length === 1 ? '' : 'es'}`;
+    } else if (dashSelectedDate) {
+      els.status.textContent = `Dashboard · Date: ${dashSelectedDate} · ${filteredBookings.length} confirmed bookings`;
+    } else {
+      els.status.textContent = `Dashboard · Summary (${allDates.length} logged day${allDates.length === 1 ? '' : 's'}) · ${totalConfirmedBookingsCount} confirmed bookings`;
+    }
+
+    // Build HTML
+    let html = `<div class="dash-view">`;
+
+    // 1. Controls (Date and Modality filter pills)
+    html += `<div class="dash-controls">
+      <div class="dash-filter-group">
+        <span class="dash-filter-label">Date:</span>
+        <button class="dash-pill ${!dashSelectedDate ? 'active' : ''}" type="button" data-dash-date="ALL" aria-pressed="${!dashSelectedDate}">All Dates (Summary)</button>`;
+    allDates.forEach(date => {
+      const active = dashSelectedDate === date;
+      html += `<button class="dash-pill ${active ? 'active' : ''}" type="button" data-dash-date="${esc(date)}" aria-pressed="${active}">${esc(date)}</button>`;
+    });
+    html += `</div>
+      <div class="dash-filter-group">
+        <span class="dash-filter-label">Modality:</span>
+        <button class="dash-pill ${!dashSelectedModality ? 'active' : ''}" type="button" data-dash-mod="ALL" aria-pressed="${!dashSelectedModality}">All</button>`;
+    const availMods = Object.keys(modAggregates);
+    availMods.forEach(mod => {
+      const shortMod = mod.replace(/\s+SCAN$/i, '');
+      const active = dashSelectedModality === shortMod;
+      html += `<button class="dash-pill ${active ? 'active' : ''}" type="button" data-dash-mod="${esc(shortMod)}" aria-pressed="${active}">${esc(shortMod)}</button>`;
+    });
+    html += `</div></div>`;
+
+    // 2. Summary KPI cards
+    const subtitle = dashSelectedDate ? `Logged on ${dashSelectedDate}` : `Across ${allDates.length} logged day${allDates.length === 1 ? '' : 's'}`;
+    html += `<div class="dash-kpis">
+      <div class="dash-kpi">
+        <div class="dash-kpi-val">${totalConfirmedBookingsCount}</div>
+        <div class="dash-kpi-label">Confirmed Bookings</div>
+        <div class="dash-kpi-sub">${subtitle}</div>
+      </div>
+      <div class="dash-kpi">
+        <div class="dash-kpi-val">${totalTodayBookings}</div>
+        <div class="dash-kpi-label">Today's Bookings</div>
+        <div class="dash-kpi-sub">All modalities</div>
+      </div>
+      <div class="dash-kpi">
+        <div class="dash-kpi-val">${totalTmrwBookings}</div>
+        <div class="dash-kpi-label">Tomorrow's Bookings</div>
+        <div class="dash-kpi-sub">All modalities</div>
+      </div>`;
+
+    if (totalEnquiries > 0) {
+      html += `<div class="dash-kpi">
+        <div class="dash-kpi-val">${totalEnquiries}</div>
+        <div class="dash-kpi-label">Total Enquiries</div>
+        <div class="dash-kpi-sub">Logged enquiries</div>
+      </div>`;
+    }
+    if (totalWalkIns > 0) {
+      html += `<div class="dash-kpi">
+        <div class="dash-kpi-val">${totalWalkIns}</div>
+        <div class="dash-kpi-label">Walk-ins</div>
+        <div class="dash-kpi-sub">Direct walk-ins</div>
+      </div>`;
+    }
+    if (totalConversions > 0) {
+      html += `<div class="dash-kpi">
+        <div class="dash-kpi-val">${totalConversions}</div>
+        <div class="dash-kpi-label">Conversions</div>
+        <div class="dash-kpi-sub">Converted bookings</div>
+      </div>`;
+    }
+    html += `</div>`;
+
+    // 3. Modality Breakdown Cards
+    html += `<div>
+      <div class="dash-section-title">
+        <span>Modality Breakdown</span>
+        <span>${dashSelectedDate || 'Aggregated Total'}</span>
+      </div>
+      <div class="dash-modalities">`;
+
+    for (const [mod, met] of Object.entries(modAggregates)) {
+      const shortMod = mod.replace(/\s+SCAN$/i, '');
+      if (dashSelectedModality && dashSelectedModality.toUpperCase() !== shortMod.toUpperCase()) {
+        continue;
+      }
+      html += `<div class="dash-mod-card">
+        <div class="dash-mod-head">
+          <span class="dash-mod-title">${esc(mod)}</span>
+          <span class="dash-badge">${shortMod}</span>
+        </div>
+        <div class="dash-mod-body">`;
+      for (const [k, v] of Object.entries(met)) {
+        if (/YET TO CONFIRM/i.test(k)) continue;
+        html += `<div class="dash-mod-row">
+          <span class="k">${esc(k)}</span>
+          <span class="v">${esc(String(v))}</span>
+        </div>`;
+      }
+      html += `</div></div>`;
+    }
+    html += `</div></div>`;
+
+    // 4. Confirmed Bookings list with Phone search and call links
+    html += `<div class="dash-bookings-box">
+      <div class="dash-bookings-head">
+        <div class="dash-bookings-title">
+          <span>Confirmed Bookings</span>
+          <span class="dash-badge">${filteredBookings.length}</span>
+        </div>
+        <span class="dash-date-badge">${normQ ? 'Filtered by: "' + esc(q) + '"' : (dashSelectedDate ? 'Date: ' + esc(dashSelectedDate) : 'Showing all confirmed bookings')}</span>
+      </div>`;
+
+    if (!filteredBookings.length) {
+      html += `<div class="dash-empty">
+        <p>No confirmed bookings found${normQ ? ' matching <strong>"' + esc(q) + '"</strong>' : ''}.</p>
+        <p style="margin-top:6px; font-size:12px; color:var(--dim);">Tip: You can search by phone number (e.g. 8089...), patient name, date, or time.</p>
+      </div>`;
+    } else {
+      html += `<div class="dash-booking-list">`;
+      filteredBookings.forEach((b, idx) => {
+        let hlName = esc(b.name || '');
+        let hlPhone = esc(b.phone || '');
+        if (normQ) {
+          try {
+            const rx = new RegExp('(' + esc(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+            hlName = hlName.replace(rx, '<mark>$1</mark>');
+            hlPhone = hlPhone.replace(rx, '<mark>$1</mark>');
+          } catch (_) {}
+        }
+        const cleanPhoneTel = (b.phone || '').replace(/[^0-9+]/g, '');
+
+        html += `<div class="dash-booking-item">
+          <div class="dash-booking-left">
+            <span class="dash-booking-name">
+              <span>${idx + 1}.</span> ${hlName}
+            </span>
+            <a href="tel:${cleanPhoneTel}" class="dash-booking-phone" title="Click to call ${cleanPhoneTel}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              ${hlPhone}
+            </a>
+          </div>
+          <div class="dash-booking-right">
+            <span class="dash-slot-badge">${esc(b.date || '')}${b.time ? ' · ' + esc(b.time) : ''}</span>
+            <span class="dash-badge">${esc(b.modality || 'MRI')}</span>
+            <span class="dash-date-badge">${esc(b.logged_date || '')}</span>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    html += `</div></div>`;
+    els.list.innerHTML = html;
+  }
+
   function render() {
-    const q     = els.q.value.trim();
+    const q = els.q.value.trim();
+    els.box.classList.toggle('has-q', !!q);
+
+    if (activeCat === '__dashboard__') {
+      els.q.placeholder = 'Search by date (e.g. 18/11/26), phone, patient name...';
+      renderDashboard(q);
+      return;
+    }
+
+    els.q.placeholder = 'Search scans, prep, times, or keywords...';
     const terms = tokens(q);
     const hl    = [...new Set(terms.filter(t => t.length >= 3))];
     re = hl.length ? new RegExp('(' + hl.join('|') + ')', 'gi') : null;
-    els.box.classList.toggle('has-q', !!q);
 
     const {items, fuzzy} = search(terms);
     const n = items.length;
@@ -1595,9 +2292,13 @@ main {
   }
 
   function renderChips() {
-    const allPressed = !activeCat;
+    const isDash = activeCat === '__dashboard__';
+    const allPressed = !activeCat || activeCat === '';
     els.chips.innerHTML =
-      `<button class="chip" type="button" data-cat="" aria-pressed="${allPressed}">All</button>` +
+      `<button class="chip" type="button" data-cat="__dashboard__" aria-pressed="${isDash}">
+        <span class="cdot" style="background:var(--accent);"></span>Dashboard
+      </button>` +
+      `<button class="chip" type="button" data-cat="" aria-pressed="${allPressed}">All Studies</button>` +
       cats.map(c => {
         const ps = paletteStyle(c.name);
         return `<button class="chip" type="button" data-cat="${esc(c.name)}" aria-pressed="${activeCat === c.name}" style="${ps}">
@@ -1643,15 +2344,31 @@ main {
   els.chips.addEventListener('click', e => {
     const b = e.target.closest('.chip');
     if (!b) return;
-    activeCat = b.dataset.cat || null;
+    activeCat = b.dataset.cat !== undefined ? b.dataset.cat : null;
     renderChips();
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   els.list.addEventListener('click', e => {
+    const dateBtn = e.target.closest('[data-dash-date]');
+    if (dateBtn) {
+      const d = dateBtn.dataset.dashDate;
+      dashSelectedDate = d === 'ALL' ? null : d;
+      render();
+      return;
+    }
+
+    const modBtn = e.target.closest('[data-dash-mod]');
+    if (modBtn) {
+      const m = modBtn.dataset.dashMod;
+      dashSelectedModality = m === 'ALL' ? null : m;
+      render();
+      return;
+    }
+
     if (e.target.closest('#all')) {
-      activeCat = null;
+      activeCat = '';
       renderChips();
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1668,6 +2385,16 @@ main {
 
   /* ── load ──────────────────────────────────────────────────────────── */
   function load() {
+    const dashEl = document.getElementById('dashboard-data');
+    if (dashEl) {
+      try {
+        dashboardData = JSON.parse(dashEl.textContent.trim()) || [];
+      } catch (err) {
+        console.error('Failed to parse dashboard data:', err);
+        dashboardData = [];
+      }
+    }
+
     const embeddedEl = document.getElementById('study-data');
     const text = embeddedEl ? embeddedEl.textContent.trim() : '';
 
