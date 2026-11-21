@@ -1,0 +1,12 @@
+i want you to optimize the ui dashboard : {
+  - in the dashboard, date selection is being placed as boxed layed in horizontal format. i want you to change that horizontal layout to vertical drop down selection menu
+  - add another tab right to the dashboard tab with the following details : {
+    - i want a calender tab in which in the upper portion represent a mini calender to choose a date.
+    - once you choose a date list out all the bookings for those dates according to their time slot
+    - arrange this calender based on the data from the dashboard
+  }
+  - for all ui changes ensure that it is based on the global theme and style of the website
+  - do not change or modify any other components other than the mentioned one
+  - in the new tab ensure that it is reliable for day to day operations
+  - do not over engineer or over complicate this change
+}
