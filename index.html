@@ -876,6 +876,55 @@ main {
   margin-right: 4px;
 }
 
+.dash-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dash-select {
+  height: 28px;
+  padding: 0 26px 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: var(--t), border-color 140ms ease, box-shadow 140ms ease;
+  user-select: none;
+}
+
+.dash-select:hover {
+  background: var(--surface-h);
+  border-color: var(--border);
+}
+
+.dash-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.dash-select-arrow {
+  position: absolute;
+  right: 8px;
+  pointer-events: none;
+  width: 12px;
+  height: 12px;
+  color: var(--dim);
+  transition: transform 140ms ease, color 140ms ease;
+}
+
+.dash-select-wrap:hover .dash-select-arrow {
+  color: var(--text);
+}
+
 .dash-pill {
   height: 28px;
   padding: 0 10px;
@@ -1214,6 +1263,307 @@ main {
   font-size: 13px;
 }
 
+/* ─── Mini Calendar Tab Styles ────────────────────────────────────────── */
+.cal-view {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: itemSlideFade 240ms var(--ease-out) both;
+}
+
+.cal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  max-width: 440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-month-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -.01em;
+}
+
+.cal-today-btn {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid transparent;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--t);
+}
+
+.cal-today-btn:hover {
+  background: var(--hover-ol);
+  border-color: var(--border);
+}
+
+.cal-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cal-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--t), transform 120ms var(--ease-spring);
+}
+
+.cal-nav-btn:hover {
+  color: var(--text);
+  background: var(--hover-ol);
+  border-color: var(--border);
+  transform: scale(1.05);
+}
+
+.cal-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  text-align: center;
+}
+
+.cal-weekday {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 4px 0 6px;
+  user-select: none;
+}
+
+.cal-day {
+  position: relative;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, transform 120ms var(--ease-spring);
+  user-select: none;
+}
+
+.cal-day:hover:not(.empty) {
+  background: var(--hover-ol);
+  border-color: var(--border-soft);
+  transform: translateY(-1px);
+}
+
+.cal-day.empty {
+  cursor: default;
+  color: transparent;
+  pointer-events: none;
+}
+
+.cal-day.today:not(.selected) {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.cal-day.has-bookings {
+  font-weight: 600;
+}
+
+.cal-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.cal-day.selected {
+  background: var(--accent);
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(109, 40, 217, .25);
+  transform: scale(1.02);
+}
+
+.cal-day.selected .cal-dot {
+  background: #ffffff;
+}
+
+/* ─── Calendar Bookings List (Lower Portion) ────────────────────────────── */
+.cal-schedule-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.cal-schedule-head {
+  padding: 12px 16px;
+  background: var(--surface-h);
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cal-schedule-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-schedule-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-slot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  transition: background-color 140ms ease;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cal-slot-row:last-child {
+  border-bottom: none;
+}
+
+.cal-slot-row:hover {
+  background: var(--hover-ol);
+}
+
+.cal-slot-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cal-time-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(109,40,217,.15);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  min-width: 84px;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.cal-patient-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cal-patient-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-slot-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cal-logged-badge {
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.cal-empty-state {
+  padding: 36px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.cal-quick-dates {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.cal-quick-date-btn {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid transparent;
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--t);
+}
+
+.cal-quick-date-btn:hover {
+  background: var(--hover-ol);
+  border-color: var(--border);
+}
+
 /* ─── Scrollbar styling ─────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -1389,6 +1739,33 @@ main {
   .dash-slot-tag {
     font-size: 11px;
     padding: 2px 6px;
+  }
+
+  /* Calendar mobile */
+  .dash-select {
+    height: 32px;
+    font-size: 13px;
+    padding: 0 28px 0 10px;
+  }
+
+  .cal-card {
+    padding: 12px;
+  }
+
+  .cal-day {
+    height: 34px;
+    font-size: 12px;
+  }
+
+  .cal-slot-row {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .cal-time-pill {
+    min-width: 72px;
+    font-size: 11px;
+    padding: 3px 6px;
   }
 }
 </style>
@@ -2168,6 +2545,7 @@ main {
 
   let studies = [], cats = [], activeCat = '__dashboard__', re = null;
   let dashboardData = [], dashSelectedDate = null, dashSelectedModality = null;
+  let calViewDate = null; // {year, month, day} for the calendar tab
   const opened = new Map();
 
   /* ── helpers ───────────────────────────────────────────────────────── */
@@ -2439,22 +2817,25 @@ main {
     // Build HTML
     let html = `<div class="dash-view">`;
 
-    // 1. Controls (Date and Modality filter pills)
+    // 1. Controls — Date dropdown + Modality pills
+    const allMods = Object.keys(modAggregates).map(m => m.replace(/\s+SCAN$/i, ''));
     html += `<div class="dash-controls">
       <div class="dash-filter-group">
         <span class="dash-filter-label">Date:</span>
-        <button class="dash-pill ${!dashSelectedDate ? 'active' : ''}" type="button" data-dash-date="ALL" aria-pressed="${!dashSelectedDate}">All Dates (Summary)</button>`;
+        <div class="dash-select-wrap">
+          <select class="dash-select" id="dash-date-select" aria-label="Filter by date">
+            <option value="ALL"${!dashSelectedDate ? ' selected' : ''}>All Dates (Summary)</option>`;
     allDates.forEach(date => {
-      const active = dashSelectedDate === date;
-      html += `<button class="dash-pill ${active ? 'active' : ''}" type="button" data-dash-date="${esc(date)}" aria-pressed="${active}">${esc(date)}</button>`;
+      html += `<option value="${esc(date)}"${dashSelectedDate === date ? ' selected' : ''}>${esc(date)}</option>`;
     });
-    html += `</div>
+    html += `</select>
+          <svg class="dash-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
       <div class="dash-filter-group">
         <span class="dash-filter-label">Modality:</span>
         <button class="dash-pill ${!dashSelectedModality ? 'active' : ''}" type="button" data-dash-mod="ALL" aria-pressed="${!dashSelectedModality}">All</button>`;
-    const availMods = Object.keys(modAggregates);
-    availMods.forEach(mod => {
-      const shortMod = mod.replace(/\s+SCAN$/i, '');
+    allMods.forEach(shortMod => {
       const active = dashSelectedModality === shortMod;
       html += `<button class="dash-pill ${active ? 'active' : ''}" type="button" data-dash-mod="${esc(shortMod)}" aria-pressed="${active}">${esc(shortMod)}</button>`;
     });
@@ -2600,6 +2981,220 @@ main {
 
     html += `</div></div>`;
     els.list.innerHTML = html;
+
+    // After render, wire up the select dropdown (can't use inline onchange in CSP-safe way)
+    const dateSelect = document.getElementById('dash-date-select');
+    if (dateSelect) {
+      dateSelect.addEventListener('change', () => {
+        dashSelectedDate = dateSelect.value === 'ALL' ? null : dateSelect.value;
+        render();
+      });
+    }
+  }
+
+  /* ── calendar helpers ───────────────────────────────────────────────── */
+  function parseBookingToISODate(b) {
+    let dateStr = (b.date || '').trim();
+    const up = dateStr.toUpperCase();
+    if (!dateStr || up === 'TODAY' || /^WALK/i.test(up)) {
+      dateStr = b.logged_date || '';
+    } else if (up === 'TOMORROW') {
+      const p = (b.logged_date || '').split(/[/.-]/);
+      if (p.length >= 3) {
+        let d = parseInt(p[0], 10), m = parseInt(p[1], 10) - 1, y = parseInt(p[2], 10);
+        if (y < 100) y += 2000;
+        const dt = new Date(y, m, d + 1);
+        return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+      }
+    }
+    const p = dateStr.split(/[/.-]/);
+    if (p.length >= 3) {
+      let d = parseInt(p[0], 10), m = parseInt(p[1], 10), y = parseInt(p[2], 10);
+      if (y < 100) y += 2000;
+      return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    }
+    // Fallback: use logged_date
+    if (b.logged_date) {
+      const lp = b.logged_date.split(/[/.-]/);
+      if (lp.length >= 3) {
+        let d = parseInt(lp[0], 10), m = parseInt(lp[1], 10), y = parseInt(lp[2], 10);
+        if (y < 100) y += 2000;
+        return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      }
+    }
+    return null;
+  }
+
+  function parseTimeMinutes(timeStr) {
+    if (!timeStr) return 9999;
+    const clean = timeStr.trim().toUpperCase();
+    if (/WALK/i.test(clean)) return 9998;
+    const m = clean.match(/^(\d{1,2})(?:[.:](\d{2}))?\s*(AM|PM)?$/i);
+    if (!m) return 9999;
+    let h = parseInt(m[1], 10);
+    const min = m[2] ? parseInt(m[2], 10) : 0;
+    const mer = m[3] ? m[3].toUpperCase() : '';
+    if (mer === 'PM' && h < 12) h += 12;
+    if (mer === 'AM' && h === 12) h = 0;
+    return h * 60 + min;
+  }
+
+  function buildBookingsByDate() {
+    const map = {};
+    dashboardData.forEach(d => {
+      (d.bookings || []).forEach(b => {
+        const iso = parseBookingToISODate(b);
+        if (!iso) return;
+        if (!map[iso]) map[iso] = [];
+        map[iso].push(b);
+      });
+    });
+    return map;
+  }
+
+  /* ── calendar renderer ──────────────────────────────────────────────── */
+  function renderCalendar() {
+    const today = new Date();
+    if (!calViewDate) {
+      calViewDate = { year: today.getFullYear(), month: today.getMonth(), day: today.getDate() };
+    }
+
+    const { year, month } = calViewDate;
+    const selectedDay = calViewDate.selectedDay || null;
+    const bookingsByDate = buildBookingsByDate();
+
+    const MONTHS = ['January','February','March','April','May','June',
+                    'July','August','September','October','November','December'];
+    const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Status line
+    const selectedISO = selectedDay ? `${year}-${String(month + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}` : null;
+    const selectedBookings = selectedISO ? (bookingsByDate[selectedISO] || []) : [];
+    const totalBookingsInMonth = Object.entries(bookingsByDate)
+      .filter(([k]) => k.startsWith(`${year}-${String(month + 1).padStart(2, '0')}`))
+      .reduce((acc, [, v]) => acc + v.length, 0);
+
+    if (selectedDay) {
+      els.status.textContent = `Calendar · ${MONTHS[month]} ${selectedDay}, ${year} · ${selectedBookings.length} booking${selectedBookings.length === 1 ? '' : 's'}`;
+    } else {
+      els.status.textContent = `Calendar · ${MONTHS[month]} ${year} · ${totalBookingsInMonth} booking${totalBookingsInMonth === 1 ? '' : 's'} this month`;
+    }
+
+    let html = `<div class="cal-view">`;
+
+    // Mini calendar card
+    html += `<div class="cal-card">
+      <div class="cal-head">
+        <div class="cal-title-wrap">
+          <span class="cal-month-title">${MONTHS[month]} ${year}</span>
+          <button class="cal-today-btn" type="button" data-cal-today="1">Today</button>
+        </div>
+        <div class="cal-nav-group">
+          <button class="cal-nav-btn" type="button" data-cal-nav="-1" aria-label="Previous month">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="cal-nav-btn" type="button" data-cal-nav="1" aria-label="Next month">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="cal-grid">`;
+
+    // Week day headers
+    DAYS.forEach(d => { html += `<div class="cal-weekday">${d}</div>`; });
+
+    // Empty cells before first day
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      html += `<div class="cal-day empty"></div>`;
+    }
+
+    // Day cells
+    for (let d = 1; d <= daysInMonth; d++) {
+      const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const hasBookings = !!(bookingsByDate[iso] && bookingsByDate[iso].length);
+      const count = hasBookings ? bookingsByDate[iso].length : 0;
+      const isToday = (d === today.getDate() && month === today.getMonth() && year === today.getFullYear());
+      const isSelected = (selectedDay === d);
+
+      let cls = 'cal-day';
+      if (hasBookings) cls += ' has-bookings';
+      if (isToday) cls += ' today';
+      if (isSelected) cls += ' selected';
+
+      html += `<div class="${cls}" data-cal-day="${d}" title="${count} booking${count === 1 ? '' : 's'} on ${d} ${MONTHS[month]}">
+        <span>${d}</span>
+        ${hasBookings ? `<div class="cal-dot"></div>` : ''}
+      </div>`;
+    }
+
+    html += `</div></div>`; // end cal-grid, cal-card
+
+    // Booking schedule for selected day
+    html += `<div class="cal-schedule-box">
+      <div class="cal-schedule-head">
+        <div class="cal-schedule-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>${selectedDay ? `${selectedDay} ${MONTHS[month]} ${year}` : 'Select a date'}</span>
+          ${selectedDay ? `<span class="dash-badge">${selectedBookings.length}</span>` : ''}
+        </div>
+        ${selectedDay ? `<span class="dash-date-badge">Tap a date in the calendar above</span>` : ''}
+      </div>`;
+
+    if (!selectedDay) {
+      // Show dates that have bookings as quick picks
+      const datesWithBookings = Object.keys(bookingsByDate)
+        .filter(k => k.startsWith(`${year}-${String(month + 1).padStart(2, '0')}`))
+        .sort();
+      html += `<div class="cal-empty-state">
+        <p>Tap a date on the calendar to view its bookings.</p>`;
+      if (datesWithBookings.length > 0) {
+        html += `<div class="cal-quick-dates">`;
+        datesWithBookings.forEach(iso => {
+          const d = parseInt(iso.split('-')[2], 10);
+          const cnt = bookingsByDate[iso].length;
+          html += `<button class="cal-quick-date-btn" type="button" data-cal-day="${d}">${d} ${MONTHS[month].slice(0, 3)} · ${cnt}</button>`;
+        });
+        html += `</div>`;
+      }
+      html += `</div>`;
+    } else if (selectedBookings.length === 0) {
+      html += `<div class="cal-empty-state"><p>No confirmed bookings on this date.</p></div>`;
+    } else {
+      const sorted = [...selectedBookings].sort((a, b) => parseTimeMinutes(a.time) - parseTimeMinutes(b.time));
+      html += `<div class="cal-schedule-list">`;
+      sorted.forEach((b, idx) => {
+        const cleanPhone = (b.phone || '').replace(/[^0-9+]/g, '');
+        const timeLabel = b.time || (b.date && /WALK/i.test(b.date) ? 'Walk-in' : '—');
+        html += `<div class="cal-slot-row">
+          <div class="cal-slot-left">
+            <div class="cal-time-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.75"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${esc(timeLabel)}
+            </div>
+            <div class="cal-patient-info">
+              <div class="cal-patient-name">
+                <span>${idx + 1}.</span> ${esc(b.name || '')}
+                <span class="dash-badge">${esc(b.modality || 'MRI')}</span>
+              </div>
+              <a href="tel:${cleanPhone}" class="dash-phone-link" style="font-size:12px;" title="Call ${cleanPhone}">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span>${esc(b.phone || '')}</span>
+              </a>
+            </div>
+          </div>
+          <div class="cal-slot-right">
+            <span class="cal-logged-badge">logged ${esc(b.logged_date || '')}</span>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    html += `</div></div>`;
+    els.list.innerHTML = html;
   }
 
   function render() {
@@ -2609,6 +3204,12 @@ main {
     if (activeCat === '__dashboard__') {
       els.q.placeholder = 'Search by date (e.g. 18/11/26), phone, patient name...';
       renderDashboard(q);
+      return;
+    }
+
+    if (activeCat === '__calendar__') {
+      els.q.placeholder = 'Calendar — tap a date to view bookings';
+      renderCalendar();
       return;
     }
 
@@ -2659,10 +3260,14 @@ main {
 
   function renderChips() {
     const isDash = activeCat === '__dashboard__';
+    const isCal  = activeCat === '__calendar__';
     const allPressed = !activeCat || activeCat === '';
     els.chips.innerHTML =
       `<button class="chip" type="button" data-cat="__dashboard__" aria-pressed="${isDash}">
         <span class="cdot" style="background:var(--accent);"></span>Dashboard
+      </button>` +
+      `<button class="chip" type="button" data-cat="__calendar__" aria-pressed="${isCal}">
+        <span class="cdot" style="background:var(--accent);opacity:0.6;"></span>Calendar
       </button>` +
       `<button class="chip" type="button" data-cat="" aria-pressed="${allPressed}">All Studies</button>` +
       cats.map(c => {
@@ -2717,6 +3322,37 @@ main {
   });
 
   els.list.addEventListener('click', e => {
+    // Calendar nav (prev / next month)
+    const calNav = e.target.closest('[data-cal-nav]');
+    if (calNav) {
+      const dir = parseInt(calNav.dataset.calNav, 10);
+      if (!calViewDate) { const t = new Date(); calViewDate = { year: t.getFullYear(), month: t.getMonth(), selectedDay: null }; }
+      calViewDate.month += dir;
+      if (calViewDate.month > 11) { calViewDate.month = 0; calViewDate.year++; }
+      if (calViewDate.month < 0)  { calViewDate.month = 11; calViewDate.year--; }
+      calViewDate.selectedDay = null;
+      renderCalendar();
+      return;
+    }
+
+    // Calendar "Today" button
+    if (e.target.closest('[data-cal-today]')) {
+      const t = new Date();
+      calViewDate = { year: t.getFullYear(), month: t.getMonth(), selectedDay: t.getDate() };
+      renderCalendar();
+      return;
+    }
+
+    // Calendar day cell or quick-date button
+    const calDay = e.target.closest('[data-cal-day]');
+    if (calDay) {
+      const d = parseInt(calDay.dataset.calDay, 10);
+      if (!calViewDate) { const t = new Date(); calViewDate = { year: t.getFullYear(), month: t.getMonth() }; }
+      calViewDate.selectedDay = (calViewDate.selectedDay === d) ? null : d;
+      renderCalendar();
+      return;
+    }
+
     const dateBtn = e.target.closest('[data-dash-date]');
     if (dateBtn) {
       const d = dateBtn.dataset.dashDate;
