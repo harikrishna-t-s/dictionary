@@ -4,12 +4,15 @@ Automation script to parse call center metrics from data.txt
 and update the embedded dashboard data inside index.html.
 
 Usage:
-    python3 update_dashboard.py
+    python3 update_dashboard.py          # update HTML from data.txt and push
+    python3 update_dashboard.py -i       # interactively enter today's data, then update and push
 """
 
 import os
 import re
 import json
+import sys
+import subprocess
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(SCRIPT_DIR, 'data.txt')
@@ -112,7 +115,104 @@ def update_index_html(days):
 
     return True
 
+def git_push():
+    """Stage index.html + data.txt, commit, and push."""
+    try:
+        subprocess.run(['git', 'add', 'index.html', 'data.txt'], cwd=SCRIPT_DIR, check=True)
+        result = subprocess.run(
+            ['git', 'diff', '--cached', '--quiet'],
+            cwd=SCRIPT_DIR
+        )
+        if result.returncode == 0:
+            print("  - No changes to commit.")
+            return
+        subprocess.run(['git', 'commit', '-m', 'Update dashboard data'], cwd=SCRIPT_DIR, check=True)
+        subprocess.run(['git', 'push'], cwd=SCRIPT_DIR, check=True)
+        print("  - Pushed to GitHub ✓")
+    except subprocess.CalledProcessError as e:
+        print(f"  - Git error: {e}")
+
+
+def collect_input():
+    """Interactively collect today's metrics and append them to data.txt."""
+    from datetime import date
+    today = date.today().strftime('%d/%m/%y')
+
+    print(f"\n=== Entering data for {today} ===")
+    print("(Press Enter to skip any field)\n")
+
+    def ask(prompt, default=''):
+        val = input(f"  {prompt}: ").strip()
+        return val if val else default
+
+    # Date override
+    date_input = ask(f"Date (default: {today})", today)
+
+    # Sections
+    sections = []
+
+    for modality in ['MRI SCAN', 'ULTRASOUND', 'CT']:
+        print(f"\n  -- {modality} --")
+        metrics = {}
+        for field in ['BOOKINGS TAKEN FOR TODAY', 'BOOKING FOR TOMORROW', 'TOTAL ENQUIRY',
+                      'BOOKING CONFIRMED', 'YET TO CONFIRM', 'WALK IN', 'CONVERSION']:
+            val = ask(field)
+            if val:
+                metrics[field] = val
+        if metrics:
+            sections.append((modality, metrics))
+
+    # Confirmed bookings
+    bookings = []
+    for mod_label, mod_key in [('MRI', 'MRI'), ('CT', 'CT'), ('Ultrasound', 'ULTRA')]:
+        print(f"\n  -- CONFIRMED {mod_label} BOOKINGS (blank name to stop) --")
+        idx = 1
+        while True:
+            name = ask(f"  {idx}. Name").strip()
+            if not name:
+                break
+            phone = ask(f"     Phone")
+            bdate = ask(f"     Date (e.g. TODAY / {today} / DD.MM.YY)")
+            time  = ask(f"     Time (e.g. 9 AM)")
+            entry = f"{name} - {phone}"
+            if bdate:
+                entry += f" - {bdate}"
+            if time:
+                entry += f" - {time}"
+            bookings.append((f"CONFIRMED {mod_label} BOOKINGS", entry, idx))
+            idx += 1
+
+    # Build text block
+    block = f"\n*{date_input}*\n"
+    for sec_name, metrics in sections:
+        block += f"\n*{sec_name}*\n"
+        for k, v in metrics.items():
+            block += f"{k} : {v}\n"
+
+    # Group bookings by section
+    from collections import defaultdict
+    booking_sections = defaultdict(list)
+    for sec, entry, idx in bookings:
+        booking_sections[sec].append((idx, entry))
+
+    for sec, entries in booking_sections.items():
+        block += f"\n*{sec}*\n"
+        for idx, entry in entries:
+            block += f"{idx}. {entry}\n"
+
+    # Append to data.txt
+    with open(DATA_FILE, 'a', encoding='utf-8') as f:
+        f.write(block)
+
+    print(f"\n✓ Appended data for {date_input} to data.txt")
+
+
 def main():
+    interactive = '-i' in sys.argv
+
+    if interactive:
+        collect_input()
+
     if not os.path.exists(DATA_FILE):
         print(f"Error: {DATA_FILE} not found.")
         return
@@ -132,6 +232,7 @@ def main():
         print(f"✓ Successfully updated {HTML_FILE}")
         print(f"  - Total days logged: {len(days)} ({', '.join(dates)})")
         print(f"  - Confirmed bookings logged: {total_bookings}")
+        git_push()
 
 if __name__ == '__main__':
     main()
